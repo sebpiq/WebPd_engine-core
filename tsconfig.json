@@ -1,0 +1,4 @@
+{
+    "extends": "@webpd/shared/tsconfig.json",
+    "include": ["./src/custom.d.ts"]
+}
