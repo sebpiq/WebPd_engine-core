@@ -1,3 +1,8 @@
+Non-included dependencies
+---------------------------
+
+Right now requires a polyfill for AudioWorklet
+
 TODO 
 ------
 

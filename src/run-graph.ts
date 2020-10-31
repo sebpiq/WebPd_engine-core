@@ -11,14 +11,13 @@ export const load = async (context: AudioContext): Promise<Engine> => {
 }
 
 export const init = async ({context}: Readonly<Engine>): Promise<Engine> => {
+    // https://github.com/WebAudio/web-audio-api/issues/345
+    if (context.state === 'suspended') {
+        context.resume()
+    }
+
     let node = new WebPdEvalNode(context)
-    // TODO : why necessary?
-    let kickStartOsc = context.createOscillator()
-    kickStartOsc.frequency.value = 0
-    kickStartOsc.connect(context.destination)
-    kickStartOsc.start(0)
     node.connect(context.destination)
-    kickStartOsc.disconnect()
     return {context, node}
 }
 

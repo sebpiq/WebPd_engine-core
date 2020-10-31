@@ -1,1 +1,9 @@
-../tsconfig.json
+{
+    "extends": "./node_modules/@webpd/shared/tsconfig.json",
+    "include": [
+        "src",
+        "src/**/*.ts",
+        "@types/**/*.d.ts",
+        "@webpd/shared/types/*.ts",
+    ]
+}

@@ -30,7 +30,5 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
-  "dependencies": {
-    "audioworklet-polyfill": "^1.1.2"
-  }
+  "dependencies": {}
 }
