@@ -1,4 +1,4 @@
-import { CompiledDspLoop } from './types'
+import { EvalDspLoop } from './types'
 
 export default class WebPdEvalNode extends AudioWorkletNode {
     constructor(context: AudioContext) {
@@ -8,7 +8,7 @@ export default class WebPdEvalNode extends AudioWorkletNode {
 
 interface DspLoopMessage {
     type: 'DSP_LOOP'
-    payload: CompiledDspLoop
+    payload: EvalDspLoop
 }
 
 export type EvalNodeMessage = DspLoopMessage

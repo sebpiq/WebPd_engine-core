@@ -7,4 +7,12 @@ export interface Engine {
     node: WebPdNode | null
 }
 
-export type CompiledDspLoop = string
+export interface EngineAttributes {
+    sampleRate: number
+    channelCount: number
+    outputVariableNames: Array<string>
+}
+
+export type EvalDspLoop = string
+
+export type EvalDspSetup = string

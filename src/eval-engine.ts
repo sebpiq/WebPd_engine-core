@@ -1,9 +1,9 @@
 import '@webpd/shared/types/WebAudioAPI'
 import evalProcessorJs from 'raw-loader!./EvalWorkletProcessor.js'
 import WebPdEvalNode, { EvalNodeMessage } from './EvalNode'
-import { CompiledDspLoop, Engine } from './types'
+import { EvalDspLoop, Engine } from './types'
  
-export const load = async (context: AudioContext): Promise<Engine> => {
+export const create = async (context: AudioContext): Promise<Engine> => {
     const blob = new Blob([evalProcessorJs], { type : 'text/javascript' })
     const processorUrl = URL.createObjectURL(blob)
     await context.audioWorklet.addModule(processorUrl)
@@ -21,6 +21,6 @@ export const init = async ({context}: Readonly<Engine>): Promise<Engine> => {
     return {context, node}
 }
 
-export const run = async ({ node }: Engine, compiledDspLoop: CompiledDspLoop) => {
+export const run = async ({ node }: Engine, compiledDspLoop: EvalDspLoop) => {
     node.port.postMessage({type: 'DSP_LOOP', payload: compiledDspLoop} as EvalNodeMessage)
 }

@@ -1,4 +1,4 @@
-import {load, init, run} from '../../src/run-graph'
+import * as evalEngine from '../../src/eval-engine'
 
 const context = new AudioContext()
 
@@ -13,13 +13,13 @@ const eventPromise = (element: HTMLElement, event: string) => {
 }
 
 const main = async () => {
-    let engine = await load(context)
+    let engine = await evalEngine.create(context)
     const button = document.createElement('button')
     button.innerHTML = 'START'
     document.body.appendChild(button)
     await eventPromise(button, 'click')
-    engine = await init(engine)
-    await run(engine, `
+    engine = await evalEngine.init(engine)
+    await evalEngine.run(engine, `
         const modFreq = 1
         const freqBase = 400
         const freqAmplitude = 20
