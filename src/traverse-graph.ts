@@ -1,7 +1,10 @@
 type GraphTraversal = Array<PdDspGraph.Node>
 
-export default (graph: PdDspGraph.Graph, registry: PdJson.Registry): GraphTraversal => {
-    const sinkNodes = Object.values(graph).filter(node => {
+export default (
+    graph: PdDspGraph.Graph,
+    registry: PdJson.Registry
+): GraphTraversal => {
+    const sinkNodes = Object.values(graph).filter((node) => {
         const nodeTemplate = registry[node.type]
         if (!nodeTemplate) {
             throw new Error(`Unknown node type ${node.type}`)
@@ -9,11 +12,18 @@ export default (graph: PdDspGraph.Graph, registry: PdJson.Registry): GraphTraver
         return nodeTemplate.isSink()
     })
     const traversal: GraphTraversal = []
-    sinkNodes.forEach((sinkNode) => recursiveTraverse(traversal, [], graph, sinkNode))
+    sinkNodes.forEach((sinkNode) =>
+        recursiveTraverse(traversal, [], graph, sinkNode)
+    )
     return traversal
 }
 
-const recursiveTraverse = (traversal: GraphTraversal, currentPath: GraphTraversal, graph: PdDspGraph.Graph, node: PdDspGraph.Node) => {
+const recursiveTraverse = (
+    traversal: GraphTraversal,
+    currentPath: GraphTraversal,
+    graph: PdDspGraph.Graph,
+    node: PdDspGraph.Node
+) => {
     const nextPath = [...currentPath, node]
     Object.values(node.sources).forEach((sourceAddress) => {
         const sourceNode = graph[sourceAddress.id]

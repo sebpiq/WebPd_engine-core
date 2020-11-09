@@ -10,14 +10,17 @@
  */
 
 import assert from 'assert'
-import { makeGraph, makeRegistry, nodeDefaults } from '@webpd/shared/test-helpers'
+import {
+    makeGraph,
+    makeRegistry,
+    nodeDefaults,
+} from '@webpd/shared/test-helpers'
 import traverseGraph from './traverse-graph'
 
 describe('traverse-graph', () => {
-
     const DUMMY_REGISTY = makeRegistry({
-        'DUMMY': {},
-        'DUMMY_SINK': {isSink: true}
+        DUMMY: {},
+        DUMMY_SINK: { isSink: true },
     })
 
     it('traverses a graph with different levels in the right order', () => {
@@ -27,24 +30,28 @@ describe('traverse-graph', () => {
         //   |   /
         // [  n3  ]
         const graph = makeGraph({
-            'n1': {
+            n1: {
                 sinks: {
-                    0: [['n3', 0], ['n2', 1]]
-                }
+                    0: [
+                        ['n3', 0],
+                        ['n2', 1],
+                    ],
+                },
             },
-            'n2': {
+            n2: {
                 sinks: {
-                    0: [['n3', 1]]
-                }
+                    0: [['n3', 1]],
+                },
             },
-            'n3': {
-                type: 'DUMMY_SINK'
-            }
+            n3: {
+                type: 'DUMMY_SINK',
+            },
         })
         const traversal = traverseGraph(graph, DUMMY_REGISTY)
-        assert.deepStrictEqual(traversal.map(node => node.id), [
-            'n1', 'n2', 'n3'
-        ])
+        assert.deepStrictEqual(
+            traversal.map((node) => node.id),
+            ['n1', 'n2', 'n3']
+        )
     })
 
     it('traverses the reversed graph with different levels in the right order', () => {
@@ -54,24 +61,28 @@ describe('traverse-graph', () => {
         //     \    |
         //    [  n3  ]
         const graph = makeGraph({
-            'n1': {
+            n1: {
                 sinks: {
-                    0: [['n2', 0], ['n3', 1]]
-                }
+                    0: [
+                        ['n2', 0],
+                        ['n3', 1],
+                    ],
+                },
             },
-            'n2': {
+            n2: {
                 sinks: {
-                    0: [['n3', 0]]
-                }
+                    0: [['n3', 0]],
+                },
             },
-            'n3': {
-                type: 'DUMMY_SINK'
-            }
+            n3: {
+                type: 'DUMMY_SINK',
+            },
         })
         const traversal = traverseGraph(graph, DUMMY_REGISTY)
-        assert.deepStrictEqual(traversal.map(node => node.id), [
-            'n1', 'n2', 'n3'
-        ])
+        assert.deepStrictEqual(
+            traversal.map((node) => node.id),
+            ['n1', 'n2', 'n3']
+        )
     })
 
     it('traverses fine with a loop in the graph', () => {
@@ -82,29 +93,30 @@ describe('traverse-graph', () => {
         //     |       |
         //    [  n2  ]/
         const graph = makeGraph({
-            'n1': {
+            n1: {
                 sinks: {
-                    0: [['n2', 0]]
-                }
+                    0: [['n2', 0]],
+                },
             },
-            'n2': {
+            n2: {
                 type: 'DUMMY_SINK',
                 sinks: {
-                    0: [['n1', 0]]
-                }
+                    0: [['n1', 0]],
+                },
             },
         })
         const traversal = traverseGraph(graph, DUMMY_REGISTY)
-        assert.deepStrictEqual(traversal.map(node => node.id), [
-            'n1', 'n2'
-        ])
+        assert.deepStrictEqual(
+            traversal.map((node) => node.id),
+            ['n1', 'n2']
+        )
     })
 
     it('raises error if unknown node type', () => {
         const graph = makeGraph({
-            'n1': {
+            n1: {
                 type: 'n_unknown',
-                sinks: {}
+                sinks: {},
             },
         })
         assert.throws(() => traverseGraph(graph, DUMMY_REGISTY))
@@ -112,16 +124,15 @@ describe('traverse-graph', () => {
 
     it('raises error if unknown source id', () => {
         const graph: PdDspGraph.Graph = {
-            'n1': nodeDefaults('n1'),
-            'n2': {
+            n1: nodeDefaults('n1'),
+            n2: {
                 ...nodeDefaults('n2'),
                 type: 'DUMMY_SINK',
                 sources: {
-                    0: {id: 'n_unknown', portlet: 0}
-                }
+                    0: { id: 'n_unknown', portlet: 0 },
+                },
             },
         }
         assert.throws(() => traverseGraph(graph, DUMMY_REGISTY))
     })
-
 })

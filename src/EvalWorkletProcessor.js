@@ -5,11 +5,7 @@ class EvalWorkletProcessor extends AudioWorkletProcessor {
         this.dspLoop = () => {}
     }
 
-    process(
-        inputs,
-        outputs,
-        parameters,
-    ) {
+    process(inputs, outputs, parameters) {
         const output = outputs[0]
         const blockSize = output[0].length
         for (let frame = 0; frame < blockSize; frame++) {
@@ -21,8 +17,8 @@ class EvalWorkletProcessor extends AudioWorkletProcessor {
     }
 
     onMessage(message) {
-        switch(message.data.type) {
-            case 'DSP_LOOP': 
+        switch (message.data.type) {
+            case 'DSP_LOOP':
                 this.setDspLoop(message.data.payload)
             default:
                 new Error(`unknown message type ${message.type}`)

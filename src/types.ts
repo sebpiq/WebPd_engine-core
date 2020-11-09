@@ -1,4 +1,4 @@
-import WebPdEvalNode from "./EvalNode"
+import WebPdEvalNode from './EvalNode'
 
 export type WebPdNode = WebPdEvalNode
 
