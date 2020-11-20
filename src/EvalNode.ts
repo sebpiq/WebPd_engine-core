@@ -9,7 +9,7 @@ export default class WebPdEvalNode extends AudioWorkletNode {
 interface SetDspMessage {
     type: 'DSP'
     payload: {
-        dspString: EvalDsp,
+        dspString: EvalDsp
         arrays: PdDspGraph.Arrays
     }
 }
@@ -17,7 +17,7 @@ interface SetDspMessage {
 interface CallPortMessage {
     type: 'PORT'
     payload: {
-        portName: string,
+        portName: string
         args: Array<any>
     }
 }

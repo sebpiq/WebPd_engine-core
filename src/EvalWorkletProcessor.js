@@ -22,10 +22,16 @@ class EvalWorkletProcessor extends AudioWorkletProcessor {
     onMessage(message) {
         switch (message.data.type) {
             case 'DSP':
-                this.setDsp(message.data.payload.dspString, message.data.payload.arrays)
+                this.setDsp(
+                    message.data.payload.dspString,
+                    message.data.payload.arrays
+                )
                 break
             case 'PORT':
-                this.callPort(message.data.payload.portName, message.data.payload.args)
+                this.callPort(
+                    message.data.payload.portName,
+                    message.data.payload.args
+                )
                 break
             default:
                 new Error(`unknown message type ${message.type}`)
@@ -33,7 +39,7 @@ class EvalWorkletProcessor extends AudioWorkletProcessor {
     }
 
     setDsp(dspString, arrays) {
-        const dsp = (new Function(dspString))()
+        const dsp = new Function(dspString)()
         this.dspLoop = dsp.loop
         this.dspArrays = dsp.arrays
         Object.entries(arrays).forEach(([arrayName, data]) => {
