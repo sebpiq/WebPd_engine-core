@@ -1,4 +1,4 @@
-import * as evalEngine from '../../src/eval-engine'
+import * as evalEngine from '../../../src/eval-engine'
 
 const context = new AudioContext()
 
@@ -13,7 +13,10 @@ const eventPromise = (element: HTMLElement, event: string) => {
 }
 
 const main = async () => {
-    let engine = await evalEngine.create(context)
+    let engine = await evalEngine.create(context, {
+        sampleRate: context.sampleRate, 
+        channelCount: 2,
+    })
     const button = document.createElement('button')
     button.innerHTML = 'START'
     document.body.appendChild(button)
@@ -28,12 +31,15 @@ const main = async () => {
 
         let phaseMod = 0
         let phaseOsc = 0
-        return () => { 
-            phaseMod += phaseStepMod
-            phaseOsc += J * (freqBase + freqAmplitude * Math.cos(phaseMod))
-            return Math.cos(phaseOsc)
+        return {
+            loop: () => { 
+                phaseMod += phaseStepMod
+                phaseOsc += J * (freqBase + freqAmplitude * Math.cos(phaseMod))
+                return [Math.cos(phaseOsc) * 0.1, Math.cos(phaseOsc) * 0.1]
+            },
+            arrays: {}
         }
-    `)
+    `, {})
     return engine
 }
 

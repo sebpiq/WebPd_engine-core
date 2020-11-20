@@ -2,7 +2,7 @@ type GraphTraversal = Array<PdDspGraph.Node>
 
 export default (
     graph: PdDspGraph.Graph,
-    registry: PdJson.Registry
+    registry: PdRegistry.Registry
 ): GraphTraversal => {
     const sinkNodes = Object.values(graph).filter((node) => {
         const nodeTemplate = registry[node.type]

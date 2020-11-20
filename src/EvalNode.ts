@@ -1,14 +1,25 @@
-import { EvalDspLoop } from './types'
+import { EvalDsp } from './types'
 
 export default class WebPdEvalNode extends AudioWorkletNode {
-    constructor(context: AudioContext) {
-        super(context, 'webpd-eval-node')
+    constructor(context: AudioContext, channelCount: number) {
+        super(context, 'webpd-eval-node', { channelCount: channelCount })
     }
 }
 
-interface DspLoopMessage {
-    type: 'DSP_LOOP'
-    payload: EvalDspLoop
+interface SetDspMessage {
+    type: 'DSP'
+    payload: {
+        dspString: EvalDsp,
+        arrays: PdDspGraph.Arrays
+    }
 }
 
-export type EvalNodeMessage = DspLoopMessage
+interface CallPortMessage {
+    type: 'PORT'
+    payload: {
+        portName: string,
+        args: Array<any>
+    }
+}
+
+export type EvalNodeMessage = SetDspMessage | CallPortMessage

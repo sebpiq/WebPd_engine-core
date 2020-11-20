@@ -33,14 +33,14 @@ describe('traverse-graph', () => {
             n1: {
                 sinks: {
                     0: [
-                        ['n3', 0],
-                        ['n2', 1],
+                        ['n3', '0'],
+                        ['n2', '1'],
                     ],
                 },
             },
             n2: {
                 sinks: {
-                    0: [['n3', 1]],
+                    0: [['n3', '1']],
                 },
             },
             n3: {
@@ -64,14 +64,14 @@ describe('traverse-graph', () => {
             n1: {
                 sinks: {
                     0: [
-                        ['n2', 0],
-                        ['n3', 1],
+                        ['n2', '0'],
+                        ['n3', '1'],
                     ],
                 },
             },
             n2: {
                 sinks: {
-                    0: [['n3', 0]],
+                    0: [['n3', '0']],
                 },
             },
             n3: {
@@ -95,13 +95,13 @@ describe('traverse-graph', () => {
         const graph = makeGraph({
             n1: {
                 sinks: {
-                    0: [['n2', 0]],
+                    0: [['n2', '0']],
                 },
             },
             n2: {
                 type: 'DUMMY_SINK',
                 sinks: {
-                    0: [['n1', 0]],
+                    0: [['n1', '0']],
                 },
             },
         })
@@ -129,7 +129,7 @@ describe('traverse-graph', () => {
                 ...nodeDefaults('n2'),
                 type: 'DUMMY_SINK',
                 sources: {
-                    0: { id: 'n_unknown', portlet: 0 },
+                    0: { id: 'n_unknown', portlet: '0' },
                 },
             },
         }
