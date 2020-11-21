@@ -23,7 +23,7 @@
     }
     ;("function" != typeof AudioWorkletNode || window.forcePolyfillingAudioWorkletNode) &&
         ((self.AudioWorkletNode = function (t, o, i) {
-            console.log('POLYFILLING')
+            console.log('POLYFILLING AudioWorkletNode')
             var s = n(t)[o],
                 a = t.createScriptProcessor(void 0, 2, i && i.outputChannelCount ? i.outputChannelCount[0] : 2);
             if (((a.parameters = new Map()), s.properties))

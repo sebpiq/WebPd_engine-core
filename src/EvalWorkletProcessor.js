@@ -4,7 +4,6 @@ class EvalWorkletProcessor extends AudioWorkletProcessor {
         this.port.onmessage = this.onMessage.bind(this)
         const defaultOutput = new Float32Array(settings.channelCount)
         this.dspLoop = () => defaultOutput
-        this.dspArrays = {}
     }
 
     process(inputs, outputs, parameters) {
@@ -22,9 +21,9 @@ class EvalWorkletProcessor extends AudioWorkletProcessor {
     onMessage(message) {
         switch (message.data.type) {
             case 'DSP':
+                globalThis.ARRAYS = message.data.payload.arrays
                 this.setDsp(
                     message.data.payload.dspString,
-                    message.data.payload.arrays
                 )
                 break
             case 'PORT':
@@ -38,16 +37,10 @@ class EvalWorkletProcessor extends AudioWorkletProcessor {
         }
     }
 
-    setDsp(dspString, arrays) {
+    setDsp(dspString) {
         const dsp = new Function(dspString)()
         this.dspLoop = dsp.loop
-        this.dspArrays = dsp.arrays
-        Object.entries(arrays).forEach(([arrayName, data]) => {
-            this.dspArrays[arrayName] = data
-        })
         this.dspPorts = dsp.ports
-        console.log('arrays', arrays)
-        console.log('ports', this.dspPorts)
     }
 
     callPort(portName, args) {

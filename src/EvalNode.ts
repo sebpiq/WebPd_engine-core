@@ -6,6 +6,8 @@ export default class WebPdEvalNode extends AudioWorkletNode {
     }
 }
 
+export const ENGINE_ARRAYS_VARIABLE_NAME = 'ARRAYS'
+
 interface SetDspMessage {
     type: 'DSP'
     payload: {

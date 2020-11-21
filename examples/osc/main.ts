@@ -1,26 +1,16 @@
-import * as evalEngine from '../../../src/eval-engine'
+import * as evalEngine from '../../src/eval-engine'
+import {createButton} from '@webpd/shared/example-helpers'
+import pEvent from 'p-event'
 
 const context = new AudioContext()
-
-const eventPromise = (element: HTMLElement, event: string) => {
-    return new Promise((resolve) => {
-        const eventListener = () => {
-            element.removeEventListener(event, eventListener)
-            resolve()
-        }
-        element.addEventListener(event, eventListener)
-    })
-}
 
 const main = async () => {
     let engine = await evalEngine.create(context, {
         sampleRate: context.sampleRate, 
         channelCount: 2,
     })
-    const button = document.createElement('button')
-    button.innerHTML = 'START'
-    document.body.appendChild(button)
-    await eventPromise(button, 'click')
+    const button = createButton('Start')
+    await pEvent(button, 'click')
     engine = await evalEngine.init(engine)
     await evalEngine.run(engine, `
         const modFreq = 1

@@ -1,4 +1,7 @@
-import * as evalEngine from '../../../src/eval-engine'
+import * as evalEngine from '../../src/eval-engine'
+import {createButton} from '@webpd/shared/example-helpers'
+import pEvent from 'p-event'
+import { ENGINE_ARRAYS_VARIABLE_NAME } from '../../src/EvalNode'
 
 const context = new AudioContext()
 
@@ -14,23 +17,6 @@ for (let i = 0; i < arraySize; i++) {
     sawtoothArray[i] = -1 + 2 * (i % 512) / 512
 }
 
-const eventPromise = (element: HTMLElement, event: string) => {
-    return new Promise((resolve) => {
-        const eventListener = () => {
-            element.removeEventListener(event, eventListener)
-            resolve()
-        }
-        element.addEventListener(event, eventListener)
-    })
-}
-
-const createButton = (label: string) => {
-    const button = document.createElement('button')
-    button.innerHTML = label
-    document.body.appendChild(button)
-    return button
-}
-
 const main = async () => {
     let engine = await evalEngine.create(context, {
         sampleRate: context.sampleRate, 
@@ -38,23 +24,28 @@ const main = async () => {
     })
 
     const startButton = createButton('START')
-    await eventPromise(startButton, 'click')
+    await pEvent(startButton, 'click')
 
     engine = await evalEngine.init(engine)
     await evalEngine.run(engine, `
-        const arraySize = ${arraySize}
-        const arrays = {}
-
         let arrayIndex = 0
-        let currentArray = new Float32Array(${arraySize})
+        let arraySize = null
+        let currentArray = null
+
+        const setArrayName = (arrayName) => {
+            currentArray = ${ENGINE_ARRAYS_VARIABLE_NAME}[arrayName]
+            arraySize = currentArray.length
+        }
+
+        setArrayName('sawtooth')
+
         return {
             loop: () => {
                 arrayIndex = (arrayIndex + 1) % arraySize
                 return [currentArray[arrayIndex] * 0.1, currentArray[arrayIndex] * 0.1]
             },
-            arrays,
             ports: {
-                setArray: (arrayName) => currentArray = arrays[arrayName]
+                setArray: (arrayName) => setArrayName(arrayName)
             }
         }
     `, {
